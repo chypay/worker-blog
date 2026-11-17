@@ -1,0 +1,80 @@
+name = "blog"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+# 静态资源挂到同一 Worker 后，导航请求（浏览器深链）优先交给静态资源、
+# 不进入 Worker，避免 Hono 的 JSON 404 覆盖 SPA 的 index.html。
+# 保持 compatibility_date 不变，避免既有运行时行为发生变化。
+compatibility_flags = ["assets_navigation_prefers_asset_serving"]
+
+# 前端静态资源（Vite 产物），与 API 同域部署
+[assets]
+directory = "../frontend/dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+
+
+# D1 数据库
+[[d1_databases]]
+binding = "DB"
+database_name = "blog-db"
+database_id = "4826f6ef-f705-4f1a-8c3f-65d503b1362c"
+
+# KV 缓存
+[[kv_namespaces]]
+binding = "CACHE"
+id = "28efd47329694d0d91ee5ce55a1974ce"
+
+# R2 存储
+[[r2_buckets]]
+binding = "STORAGE"
+bucket_name = "blog-storage"
+
+# Durable Object - 原子限流计数器
+[[durable_objects.bindings]]
+name = "RATE_LIMITER"
+class_name = "RateLimiter"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["RateLimiter"]
+
+# 日志配置
+[observability]
+enabled = true
+head_sampling_rate = 1
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+persist = true
+invocation_logs = true
+
+# 定时任务触发器（每 15 分钟扫描一次到期汇总，daily / weekly 在同一任务内处理）
+[triggers]
+crons = ["*/15 * * * *"]
+
+# 环境变量（公开的配置）
+[vars]
+ENVIRONMENT = "production"
+FRONTEND_URL = "https://blog.zzstatic.com"
+STORAGE_PUBLIC_URL = "https://storage.zzstatic.com"
+RESEND_FROM_EMAIL = "noreply@wobyo.com"
+
+# 自定义域名（部署时自动绑定 blog.zzstatic.com 并创建 DNS 记录）
+[[routes]]
+pattern = "blog.zzstatic.com"
+custom_domain = true
+
+# Secrets（需要通过命令行或Cloudflare Dashboard设置）
+# wrangler secret put JWT_SECRET
+# wrangler secret put POST_PASSWORD_SECRET  # 文章密码访问 Token 密钥（可选，默认使用 JWT_SECRET）
+# wrangler secret put GITHUB_CLIENT_ID
+# wrangler secret put GITHUB_CLIENT_SECRET
+
+# 或者在Cloudflare Dashboard设置:
+# Workers & Pages > blog > Settings > Variables
+# 添加以下环境变量（加密）：
+# - JWT_SECRET: 用户认证 JWT 密钥
+# - POST_PASSWORD_SECRET: 文章密码访问 Token 密钥（可选）
+# - GITHUB_CLIENT_ID: GitHub OAuth Client ID
+# - GITHUB_CLIENT_SECRET: GitHub OAuth Client Secret

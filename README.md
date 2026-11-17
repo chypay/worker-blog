@@ -1,0 +1,468 @@
+# Personal Blog
+
+一个基于 Cloudflare 全栈技术构建的现代化个人博客系统。
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/badge/version-1.4.0-green.svg)](https://github.com/yourusername/personal-blog)
+[![Cloudflare](https://img.shields.io/badge/Cloudflare-Workers-orange.svg)](https://workers.cloudflare.com/)
+[![zread](https://img.shields.io/badge/Ask_Zread-_.svg?style=flat&color=00b0aa&labelColor=000000&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQuOTYxNTYgMS42MDAxSDIuMjQxNTZDMS44ODgxIDEuNjAwMSAxLjYwMTU2IDEuODg2NjQgMS42MDE1NiAyLjI0MDFWNC45NjAxQzEuNjAxNTYgNS4zMTM1NiAxLjg4ODEgNS42MDAxIDIuMjQxNTYgNS42MDAxSDQuOTYxNTZDNS4zMTUwMiA1LjYwMDEgNS42MDE1NiA1LjMxMzU2IDUuNjAxNTYgNC45NjAxVjIuMjQwMUM1LjYwMTU2IDEuODg2NjQgNS4zMTUwMiAxLjYwMDEgNC45NjE1NiAxLjYwMDFaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00Ljk2MTU2IDEwLjM5OTlIMi4yNDE1NkMxLjg4ODEgMTAuMzk5OSAxLjYwMTU2IDEwLjY4NjQgMS42MDE1NiAxMS4wMzk5VjEzLjc1OTlDMS42MDE1NiAxNC4xMTM0IDEuODg4MSAxNC4zOTk5IDIuMjQxNTYgMTQuMzk5OUg0Ljk2MTU2QzUuMzE1MDIgMTQuMzk5OSA1LjYwMTU2IDE0LjExMzQgNS42MDE1NiAxMy43NTk5VjExLjAzOTlDNS42MDE1NiAxMC42ODY0IDUuMzE1MDIgMTAuMzk5OSA0Ljk2MTU2IDEwLjM5OTlaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik0xMy43NTg0IDEuNjAwMUgxMS4wMzg0QzEwLjY4NSAxLjYwMDEgMTAuMzk4NCAxLjg4NjY0IDEwLjM5ODQgMi4yNDAxVjQuOTYwMUMxMC4zOTg0IDUuMzEzNTYgMTAuNjg1IDUuNjAwMSAxMS4wMzg0IDUuNjAwMUgxMy43NTg0QzE0LjExMTkgNS42MDAxIDE0LjM5ODQgNS4zMTM1NiAxNC4zOTg0IDQuOTYwMVYyLjI0MDFDMTQuMzk4NCAxLjg4NjY0IDE0LjExMTkgMS42MDAxIDEzLjc1ODQgMS42MDAxWiIgZmlsbD0iI2ZmZiIvPgo8cGF0aCBkPSJNNCAxMkwxMiA0TDQgMTJaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00IDEyTDEyIDQiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K&logoColor=ffffff)](https://zread.ai/Zoroaaa/personal-blog)
+
+---
+
+## 🔗 快速访问
+
+<div align="center">
+
+| 资源类型 | 链接 | 备注 |
+|---------|------|------|
+| 📖 项目文档 | 👉 [完整介绍](https://zread.ai/Zoroaaa/personal-blog) | 详细的项目说明和使用指南 |
+| 🚀 在线体验 | 👉 [https://blog.wort.uk](https://blog.wort.uk) | 体验完整功能 |
+
+</div>
+
+## 效果图
+
+<img width="1920" height="869" alt="image" src="https://github.com/user-attachments/assets/a6fc5062-d7e5-42e6-92cd-a3cf7dbae454" />
+<img width="1920" height="869" alt="image" src="https://github.com/user-attachments/assets/e0dd9ccd-a209-43fe-a6e4-fa23d1e0434d" />
+<img width="1920" height="869" alt="image" src="https://github.com/user-attachments/assets/dc0539fd-104c-4cc8-bd62-73b45f0ba475" />
+<img width="1920" height="869" alt="image" src="https://github.com/user-attachments/assets/172d64f8-90bf-4bea-bb44-5dcd8e3c567b" />
+<img width="1920" height="869" alt="image" src="https://github.com/user-attachments/assets/32b31e35-15b0-4482-a16f-6f3bec8d5fb4" />
+<img width="1920" height="869" alt="image" src="https://github.com/user-attachments/assets/f0126330-ff7c-470b-9cae-2e56172298a5" />
+<img width="1920" height="869" alt="image" src="https://github.com/user-attachments/assets/d5000fbc-0073-4dda-ac34-90c4bcd5cde7" />
+<img width="1920" height="869" alt="image" src="https://github.com/user-attachments/assets/830748ad-a589-4ba2-89d8-4afe68072d7d" />
+<img width="1920" height="869" alt="image" src="https://github.com/user-attachments/assets/561172d5-1856-4d2d-b6c0-c2ae9a07da74" />
+<img width="1920" height="869" alt="image" src="https://github.com/user-attachments/assets/963bbe95-436e-4314-94a7-dfa4580b6df7" />
+<img width="1920" height="869" alt="image" src="https://github.com/user-attachments/assets/469d3bc8-1682-46bb-b2ea-025a857c63b5" />
+
+---
+
+## 项目概述
+
+这是一个功能丰富、性能卓越的个人博客系统，采用前后端分离架构，基于 Cloudflare 边缘计算平台构建。系统支持 Markdown 写作、代码高亮、评论互动、用户管理、数据分析等完整功能，适合技术博主和内容创作者使用。
+
+### 核心特性
+
+- **现代化技术栈**: React 18 + TypeScript + Tailwind CSS + Hono 4
+- **边缘计算架构**: 基于 Cloudflare Workers/Pages，全球低延迟访问
+- **完整内容管理**: 文章、专栏、分类、标签、评论的全生命周期管理
+- **用户系统**: 支持邮箱注册、GitHub OAuth 登录、邮箱验证码、密码重置
+- **互动功能**: 点赞、收藏、阅读历史、嵌套评论（最多5层）、@提及
+- **全文搜索**: 支持 FTS5 全文搜索引擎，支持中英文混合搜索
+- **通知系统**: 站内通知中心、通知设置、免打扰模式、首页轮播公告
+- **私信系统**: 用户间私信、会话管理、消息已读状态、消息撤回
+- **管理后台**: 用户管理、内容审核、系统配置、数据分析、系统通知发布
+- **SEO 优化**: 动态 meta 标签、结构化数据、搜索引擎友好
+- **响应式设计**: 完美适配桌面端、平板和移动设备
+- **主题系统**: 支持亮色/暗色主题切换、自定义主色调、字体大小调节
+- **安全增强**: 密码保护文章、文件魔数验证、软删除机制
+
+---
+
+## 技术架构
+
+### 前端技术栈
+
+| 技术 | 版本 | 用途 |
+|------|------|------|
+| React | 18.2.0 | UI 框架 |
+| TypeScript | 5.2.2 | 类型安全 |
+| Vite | 7.3.1 | 构建工具 |
+| Tailwind CSS | 3.4.0 | 样式框架 |
+| Zustand | 4.4.7 | 状态管理 |
+| React Router | 6.21.0 | 路由管理 |
+| React Markdown | 9.0.1 | Markdown 渲染 |
+| Framer Motion | 12.34.0 | 动画效果 |
+| date-fns | 3.0.6 | 日期处理 |
+
+### 后端技术栈
+
+| 技术 | 版本 | 用途 |
+|------|------|------|
+| Hono | 4.11.9 | Web 框架 |
+| Cloudflare Workers | - | 边缘计算运行时 |
+| Cloudflare D1 | - | SQLite 数据库 |
+| Cloudflare KV | - | 键值存储 |
+| Cloudflare R2 | - | 对象存储 |
+| bcryptjs | 3.0.3 | 密码哈希 |
+
+---
+
+## 快速开始
+
+### 环境要求
+
+- Node.js 20+
+- pnpm 8+ 或 npm 9+
+- Cloudflare 账号
+
+### 安装步骤
+
+1. **克隆项目**
+   ```bash
+   git clone https://github.com/yourusername/personal-blog.git
+   cd personal-blog
+   ```
+
+2. **安装依赖**
+   ```bash
+   # 安装后端依赖
+   cd backend && pnpm install
+   
+   # 安装前端依赖
+   cd ../frontend && pnpm install
+   ```
+
+3. **配置环境变量**
+   ```bash
+   cp backend/.env.example backend/.env
+   cp frontend/.env.example frontend/.env
+   ```
+   根据 `.env.example` 中的说明填写必要配置。
+
+4. **创建数据库**
+   ```bash
+   cd backend
+   wrangler d1 create personal-blog-dev
+   
+   # 执行数据库迁移（按顺序执行）
+   wrangler d1 execute personal-blog-dev --file=../database/schema-v1.1-base.sql
+   wrangler d1 execute personal-blog-dev --file=../database/schema-v1.3-notification-messaging.sql
+   wrangler d1 execute personal-blog-dev --file=../database/schema-v1.4-refresh-tokens.sql
+   ```
+
+5. **创建 R2 存储桶**
+   ```bash
+   wrangler r2 bucket create personal-blog-images-dev
+   ```
+
+6. **启动开发服务器**
+   ```bash
+   # 启动后端（端口 8787）
+   cd backend && pnpm dev
+   
+   # 启动前端（端口 5173）
+   cd frontend && pnpm dev
+   ```
+
+详细配置请参考 [docs/QUICKSTART.md](./docs/QUICKSTART.md)。
+
+---
+
+## 项目结构
+
+```
+personal-blog/
+├── backend/                 # 后端服务 (37个TypeScript文件)
+│   ├── src/
+│   │   ├── index.ts        # 应用入口
+│   │   ├── routes/         # API 路由
+│   │   │   ├── auth.ts     # 认证相关（注册/登录/OAuth/邮箱验证）
+│   │   │   ├── posts.ts    # 文章管理（CRUD/搜索/点赞/收藏/阅读历史/热门文章/推荐文章）
+│   │   │   ├── columns.ts  # 专栏管理
+│   │   │   ├── comments.ts # 评论系统（嵌套回复/@提及）
+│   │   │   ├── admin.ts    # 后台管理
+│   │   │   ├── categories.ts # 分类标签管理
+│   │   │   ├── config.ts   # 站点配置
+│   │   │   ├── upload.ts   # 文件上传
+│   │   │   ├── analytics.ts # 数据分析
+│   │   │   ├── notifications.ts # 通知系统
+│   │   │   ├── adminNotifications.ts # 管理员通知管理
+│   │   │   ├── messages.ts # 私信系统
+│   │   │   ├── users.ts    # 用户相关
+│   │   │   └── users/      # 用户子路由
+│   │   │       ├── notificationSettings.ts # 通知设置
+│   │   │       └── messageSettings.ts # 私信设置
+│   │   ├── middleware/     # 中间件
+│   │   │   ├── auth.ts     # 认证中间件
+│   │   │   ├── rateLimit.ts # 限流中间件
+│   │   │   └── requestLogger.ts # 请求日志
+│   │   ├── services/       # 业务服务
+│   │   │   ├── digestService.ts # 邮件汇总服务
+│   │   │   ├── doNotDisturb.ts # 免打扰服务
+│   │   │   ├── emailVerificationService.ts # 邮箱验证服务
+│   │   │   ├── mentionService.ts # @提及服务
+│   │   │   ├── messageService.ts # 私信服务
+│   │   │   ├── messageSettingsService.ts # 私信设置服务
+│   │   │   ├── notificationService.ts # 通知服务
+│   │   │   ├── notificationSettingsService.ts # 通知设置服务
+│   │   │   └── postService.ts # 文章服务
+│   │   ├── utils/          # 工具函数
+│   │   │   ├── cache.ts    # 缓存工具
+│   │   │   ├── jwt.ts      # JWT处理
+│   │   │   ├── queryOptimizer.ts # 查询优化
+│   │   │   ├── resend.ts   # 邮件发送
+│   │   │   ├── response.ts # 响应格式化
+│   │   │   ├── softDeleteHelper.ts # 软删除助手
+│   │   │   └── validation.ts # 数据验证
+│   │   ├── types/          # 类型定义
+│   │   └── config/         # 配置文件
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── wrangler.toml       # Workers 配置
+├── database/               # 数据库文件
+│   ├── schema-v1.1-base.sql          # 基础数据库架构
+│   ├── schema-v1.3-notification-messaging.sql # 通知私信架构
+│   └── schema-v1.4-refresh-tokens.sql # Refresh Token 支持
+├── frontend/               # 前端应用 (64个TypeScript文件)
+│   ├── src/
+│   │   ├── pages/          # 页面组件
+│   │   │   ├── HomePage.tsx      # 首页（热门文章排行）
+│   │   │   ├── PostPage.tsx      # 文章详情（上下篇导航/推荐文章）
+│   │   │   ├── LoginPage.tsx     # 登录页
+│   │   │   ├── AdminPage.tsx     # 管理后台
+│   │   │   ├── SearchPage.tsx    # 搜索页
+│   │   │   ├── ProfilePage.tsx   # 个人中心（评论/点赞/收藏）
+│   │   │   ├── ReadingHistoryPage.tsx # 阅读历史页
+│   │   │   ├── AccountSettingsPage.tsx # 账号设置页
+│   │   │   ├── ColumnPage.tsx    # 专栏详情
+│   │   │   ├── CategoryPage.tsx  # 分类页
+│   │   │   ├── TagPage.tsx       # 标签页
+│   │   │   ├── AboutPage.tsx     # 关于页面
+│   │   │   ├── ConfigPage.tsx    # 配置页面
+│   │   │   ├── NotificationCenter.tsx # 通知中心
+│   │   │   ├── NotificationSettings.tsx # 通知设置
+│   │   │   ├── MessageSettings.tsx # 私信设置
+│   │   │   ├── MessagesPage.tsx  # 私信列表
+│   │   │   ├── NewMessagePage.tsx # 发起新私信
+│   │   │   ├── ThreadPage.tsx    # 私信会话
+│   │   │   ├── ApiTestPage.tsx   # API测试页
+│   │   │   ├── NotFoundPage.tsx  # 404页面
+│   │   │   └── admin/            # 管理页面
+│   │   │       └── SystemNotificationPage.tsx # 系统通知管理
+│   │   ├── components/     # 可复用组件
+│   │   ├── stores/         # 状态管理
+│   │   │   ├── authStore.ts # 认证状态
+│   │   │   ├── themeStore.ts # 主题状态（亮暗色/主色调/字体大小）
+│   │   │   └── notificationStore.ts # 通知状态
+│   │   ├── hooks/          # 自定义 Hooks
+│   │   ├── utils/          # 工具函数
+│   │   └── types/          # 类型定义
+│   └── index.html
+├── docs/                   # 文档目录
+│   ├── QUICKSTART.md       # 快速开始
+│   ├── DEPLOYMENT.md       # 部署指南
+│   ├── API.md              # API 文档
+│   ├── ARCHITECTURE.md     # 架构文档
+│   └── changelog/          # 更新日志
+│       ├── CHANGELOG_v1.2.0.md
+│       ├── CHANGELOG_v1.3.0.md
+│       ├── CHANGELOG_v1.3.1.md
+│       ├── CHANGELOG_v1.3.2.md
+│       ├── CHANGELOG_v1.3.3.md
+│       └── CHANGELOG_v1.4.0.md
+├── scripts/                # 工具脚本
+│   ├── init.sh             # 初始化脚本
+│   └── migrate.sh          # 迁移脚本
+├── package.json            # 根项目配置
+├── LICENSE                 # MIT开源协议
+└── README.md               # 本文件
+```
+
+---
+
+## 功能模块
+
+### 文章系统
+
+- ✅ Markdown 编辑器支持
+- ✅ 代码语法高亮
+- ✅ 文章分类和标签
+- ✅ 文章专栏归类
+- ✅ 浏览量统计
+- ✅ 文章搜索（FTS5全文搜索，支持中英文）
+- ✅ SEO 元数据配置
+- ✅ 文章密码保护
+- ✅ 阅读进度追踪
+- ✅ 软删除机制
+- ✅ **文章置顶功能**（v1.4.0新增）
+- ✅ **上下篇导航**（v1.4.0新增）
+- ✅ **相关推荐文章**（v1.4.0新增）
+
+### 专栏系统
+
+- ✅ 专栏创建与管理
+- ✅ 专栏封面和描述
+- ✅ 专栏统计（文章数、浏览量、点赞数等）
+- ✅ 专栏文章列表
+- ✅ 专栏排序功能
+- ✅ 专栏状态管理（active/hidden/archived）
+- ✅ 专栏统计刷新
+
+### 评论系统
+
+- ✅ 嵌套评论（最多5层）
+- ✅ 评论审核
+- ✅ 评论点赞
+- ✅ 管理员回复标识
+- ✅ 评论@用户功能
+- ✅ IP和User Agent记录
+
+### 用户系统
+
+- ✅ 邮箱注册/登录
+- ✅ GitHub OAuth 登录
+- ✅ 邮箱验证码（Resend）
+- ✅ 密码重置
+- ✅ 用户资料管理
+- ✅ 阅读历史
+- ✅ 收藏文章
+- ✅ 账号删除（软删除）
+- ✅ **独立账号设置页面**（v1.4.0新增）
+- ✅ **个人中心整合**（v1.4.0重构）
+
+### 主题系统
+
+- ✅ 亮色/暗色模式切换
+- ✅ 跟随系统主题
+- ✅ **自定义主色调**（v1.4.0新增）
+- ✅ **字体大小调节**（v1.4.0新增）
+- ✅ **全页面主题适配**（v1.4.0优化）
+
+### 首页功能
+
+- ✅ 文章列表展示
+- ✅ 分类筛选
+- ✅ 专栏筛选
+- ✅ 标签筛选
+- ✅ 通知轮播
+- ✅ **热门文章排行**（v1.4.0新增，替换原快速导航和数据统计）
+
+### 通知系统
+
+- ✅ 站内通知中心
+- ✅ 通知类型：系统通知、互动通知
+- ✅ 首页通知轮播
+- ✅ 通知设置管理（细粒度控制）
+- ✅ 免打扰模式（支持时段设置）
+- ✅ 邮件汇总（每日/每周）
+- ✅ 通知未读计数
+
+### 私信系统
+
+- ✅ 用户间私信发送
+- ✅ 会话列表管理
+- ✅ 未读消息计数
+- ✅ 消息已读状态
+- ✅ 私信设置（陌生人限制）
+- ✅ 收件箱/发件箱管理
+- ✅ 消息撤回功能
+
+### 管理后台
+
+- ✅ 仪表盘统计
+- ✅ 文章管理（CRUD）
+- ✅ 专栏管理
+- ✅ 评论审核
+- ✅ 用户管理（状态/角色）
+- ✅ 分类/标签管理
+- ✅ 系统配置
+- ✅ 数据分析
+- ✅ 系统通知发布
+
+---
+
+## API 文档
+
+完整的 API 文档请参考 [docs/API.md](./docs/API.md)。
+
+主要 API 模块：
+- **认证模块**: `/api/auth/*` - 登录、注册、OAuth、邮箱验证码、密码重置
+- **文章模块**: `/api/posts/*` - 文章 CRUD、搜索、阅读历史、密码验证、热门文章、推荐文章
+- **专栏模块**: `/api/columns/*` - 专栏管理、统计刷新
+- **评论模块**: `/api/comments/*` - 评论管理、点赞
+- **分类模块**: `/api/categories/*` - 分类标签
+- **管理模块**: `/api/admin/*` - 后台管理
+- **配置模块**: `/api/config/*` - 站点配置
+- **上传模块**: `/api/upload/*` - 文件上传
+- **统计模块**: `/api/analytics/*` - 数据分析
+- **通知模块**: `/api/notifications/*` - 通知管理
+- **私信模块**: `/api/messages/*` - 私信系统
+- **用户模块**: `/api/users/*` - 用户搜索、资料
+
+---
+
+## 部署
+
+本项目支持一键部署到 Cloudflare 平台。
+
+### 部署架构
+
+- **运行时**: 单个 Cloudflare Worker（`blog`）
+- **前端**: Worker 静态资源（`frontend/dist`，与 API 同域）
+- **后端 API**: 同一 Worker，路径 `/api/*`
+- **数据库**: Cloudflare D1
+- **缓存**: Cloudflare KV
+- **存储**: Cloudflare R2
+- **邮件**: Resend
+- **部署**: Workers Builds（构建前端后与 Worker 一起上传），push 不自动部署，只由 GitHub Actions 调用部署钩子触发
+- **流水线**: GitHub Actions 先 typecheck、再迁移生产 D1，成功后触发部署钩子；任何一步失败都不部署
+
+详细部署步骤请参考 [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)。
+
+### 快速部署
+
+```bash
+# 本地手动部署：先构建前端，再连同 Worker 与静态资源一起上传
+npm run deploy
+
+# 生产库迁移
+npm run migrate -- blog-db --remote
+```
+
+---
+
+## 系统要求
+
+### 最低配置
+
+- Cloudflare Workers 免费版
+- Cloudflare D1 免费版（500MB 存储）
+- Cloudflare KV 免费版（1GB 存储）
+- Cloudflare R2 免费版（10GB 存储）
+
+### 推荐配置
+
+- Cloudflare Workers 付费版（无请求限制）
+- Cloudflare D1 付费版（更大存储）
+- 自定义域名
+
+---
+
+## 浏览器支持
+
+- Chrome 90+
+- Firefox 88+
+- Safari 14+
+- Edge 90+
+
+---
+
+## 贡献指南
+
+欢迎提交 Issue 和 Pull Request。
+
+1. Fork 项目
+2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 创建 Pull Request
+
+---
+
+## 开源协议
+
+本项目基于 [MIT License](./LICENSE) 开源。
+
+---
+
+## 相关文档
+
+- [快速开始](./docs/QUICKSTART.md) - 5分钟上手教程
+- [部署指南](./docs/DEPLOYMENT.md) - 详细部署说明
+- [API 文档](./docs/API.md) - 完整接口参考
+- [架构文档](./docs/ARCHITECTURE.md) - 系统设计说明
+- [更新日志](./docs/changelog/CHANGELOG_v1.4.0.md) - 版本更新记录
+
+---
+
+**版本**: v1.4.0 | **更新日期**: 2026-02-17
