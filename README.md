@@ -7,6 +7,12 @@
 [![Cloudflare](https://img.shields.io/badge/Cloudflare-Workers-orange.svg)](https://workers.cloudflare.com/)
 [![zread](https://img.shields.io/badge/Ask_Zread-_.svg?style=flat&color=00b0aa&labelColor=000000&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQuOTYxNTYgMS42MDAxSDIuMjQxNTZDMS44ODgxIDEuNjAwMSAxLjYwMTU2IDEuODg2NjQgMS42MDE1NiAyLjI0MDFWNC45NjAxQzEuNjAxNTYgNS4zMTM1NiAxLjg4ODEgNS42MDAxIDIuMjQxNTYgNS42MDAxSDQuOTYxNTZDNS4zMTUwMiA1LjYwMDEgNS42MDE1NiA1LjMxMzU2IDUuNjAxNTYgNC45NjAxVjIuMjQwMUM1LjYwMTU2IDEuODg2NjQgNS4zMTUwMiAxLjYwMDEgNC45NjE1NiAxLjYwMDFaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00Ljk2MTU2IDEwLjM5OTlIMi4yNDE1NkMxLjg4ODEgMTAuMzk5OSAxLjYwMTU2IDEwLjY4NjQgMS42MDE1NiAxMS4wMzk5VjEzLjc1OTlDMS42MDE1NiAxNC4xMTM0IDEuODg4MSAxNC4zOTk5IDIuMjQxNTYgMTQuMzk5OUg0Ljk2MTU2QzUuMzE1MDIgMTQuMzk5OSA1LjYwMTU2IDE0LjExMzQgNS42MDE1NiAxMy43NTk5VjExLjAzOTlDNS42MDE1NiAxMC42ODY0IDUuMzE1MDIgMTAuMzk5OSA0Ljk2MTU2IDEwLjM5OTlaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik0xMy43NTg0IDEuNjAwMUgxMS4wMzg0QzEwLjY4NSAxLjYwMDEgMTAuMzk4NCAxLjg4NjY0IDEwLjM5ODQgMi4yNDAxVjQuOTYwMUMxMC4zOTg0IDUuMzEzNTYgMTAuNjg1IDUuNjAwMSAxMS4wMzg0IDUuNjAwMUgxMy43NTg0QzE0LjExMTkgNS42MDAxIDE0LjM5ODQgNS4zMTM1NiAxNC4zOTg0IDQuOTYwMVYyLjI0MDFDMTQuMzk4NCAxLjg4NjY0IDE0LjExMTkgMS42MDAxIDEzLjc1ODQgMS42MDAxWiIgZmlsbD0iI2ZmZiIvPgo8cGF0aCBkPSJNNCAxMkwxMiA0TDQgMTJaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00IDEyTDEyIDQiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K&logoColor=ffffff)](https://zread.ai/Zoroaaa/personal-blog)
 
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/chypay/personal-blog-worker)
+
+> 点上面这个按钮，Cloudflare 会把本仓库复制到你的 GitHub 账号、自动创建 D1 / KV / R2 / Durable Object，
+> 并把资源 ID 回写到复制出来的仓库里，然后直接部署。全程不用手动建资源。
+> 部署完成后还需要设置 `JWT_SECRET`（详见[一键部署](#一键部署)）。
+
 ---
 
 ## 🔗 快速访问
@@ -152,6 +158,7 @@
 
 ```
 personal-blog/
+├── wrangler.toml            # Worker 配置（仓库根，一键部署按钮读取此文件）
 ├── backend/                 # 后端服务 (37个TypeScript文件)
 │   ├── src/
 │   │   ├── index.ts        # 应用入口
@@ -197,8 +204,7 @@ personal-blog/
 │   │   ├── types/          # 类型定义
 │   │   └── config/         # 配置文件
 │   ├── package.json
-│   ├── tsconfig.json
-│   └── wrangler.toml       # Workers 配置
+│   └── tsconfig.json
 ├── database/               # 数据库文件
 │   ├── schema-v1.1-base.sql          # 基础数据库架构
 │   ├── schema-v1.3-notification-messaging.sql # 通知私信架构
@@ -394,20 +400,46 @@ personal-blog/
 - **缓存**: Cloudflare KV
 - **存储**: Cloudflare R2
 - **邮件**: Resend
-- **部署**: Workers Builds（构建前端后与 Worker 一起上传），push 不自动部署，只由 GitHub Actions 调用部署钩子触发
-- **流水线**: GitHub Actions 先 typecheck、再迁移生产 D1，成功后触发部署钩子；任何一步失败都不部署
+- **配置**: 仓库根目录的 `wrangler.toml`（资源 ID 为占位值，部署时自动生成并回写）
 
 详细部署步骤请参考 [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)。
 
-### 快速部署
+### 一键部署
+
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/chypay/personal-blog-worker)
+
+1. 点上面的按钮，用 GitHub 授权 Cloudflare 读取本仓库
+2. 在配置页确认 Worker 名称、仓库名，需要的话改 D1 / KV / R2 的资源名
+3. 点部署：Cloudflare 自动创建 D1 / KV / R2 / Durable Object，构建前端，部署 Worker，跑完 D1 迁移
+4. 部署完成后，到 Worker 的 Settings → Variables 里加一个 secret：`JWT_SECRET`（用 `openssl rand -base64 32` 生成），否则登录会失败
+5. 想用自己的域名：在 Worker 的 Settings → Domains & Routes 里添加自定义域名，或在 `wrangler.toml` 里打开 `[[routes]]` 段
+
+> 一键部署按钮只能用在**公开仓库**上。仓库私有的话，用下面的 Workers Builds 或本地手动部署。
+
+### Workers Builds（连 Git 自动部署）
+
+在 Cloudflare Dashboard → Workers & Pages → Create → Import a Git repository 里选本仓库，然后填：
+
+| 配置项 | 值 |
+|---|---|
+| Root directory | `/`（仓库根，不要填 `backend`） |
+| Build command | `npm ci && npm run build` |
+| Deploy command | `npm run deploy` |
+
+`npm run deploy` 会依次做：构建前端 → 对生产 D1 跑迁移 → `wrangler deploy`。
+
+### 本地手动部署
 
 ```bash
-# 本地手动部署：先构建前端，再连同 Worker 与静态资源一起上传
-npm run deploy
+# 首次：创建 D1 / KV / R2，生成 JWT_SECRET，跑生产库迁移
+npm run init
 
-# 生产库迁移
-npm run migrate -- blog-db --remote
+# 之后每次发布
+npm run deploy            # 构建 + 迁移 + 部署
+npm run deploy:only       # 只构建 + 部署，不跑迁移
 ```
+
+> 部署命令必须在**仓库根目录**执行。`wrangler.toml` 在根目录，`[assets]` 的 `frontend/dist` 相对它解析；进到 `backend/` 里单独跑 `wrangler deploy` 会缺少前端静态资源。
 
 ---
 

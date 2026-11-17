@@ -9,12 +9,35 @@
   ],
   "scripts": {
     "dev": "npm run dev --workspace=frontend",
-    "dev:backend": "npm run dev --workspace=backend",
+    "dev:backend": "wrangler dev",
     "build": "npm run build --workspace=frontend",
-    "deploy": "npm run build --workspace=frontend && wrangler deploy --config backend/wrangler.toml",
-    "init": "bash scripts/init.sh",
-    "migrate": "bash scripts/migrate.sh",
+    "deploy": "npm run build && npm run db:migrate && wrangler deploy",
+    "deploy:only": "npm run build && wrangler deploy",
+    "db:migrate": "node scripts/migrate.mjs --remote",
+    "db:migrate:local": "node scripts/migrate.mjs",
+    "init": "node scripts/init.mjs",
+    "migrate": "node scripts/migrate.mjs",
+    "migrate:remote": "node scripts/migrate.mjs --remote",
     "test": "npm run test --workspaces --if-present"
+  },
+  "cloudflare": {
+    "bindings": {
+      "JWT_SECRET": {
+        "description": "用户登录 Token 的签名密钥，必需。生成方式：`openssl rand -base64 32`"
+      },
+      "POST_PASSWORD_SECRET": {
+        "description": "文章密码访问 Token 的加密密钥，可选。不填时复用 JWT_SECRET"
+      },
+      "RESEND_API_KEY": {
+        "description": "Resend 邮件服务 API Key，可选。填了才会发送注册验证码与通知邮件，在 https://resend.com/api-keys 创建"
+      },
+      "GITHUB_CLIENT_ID": {
+        "description": "GitHub OAuth App 的 Client ID，可选。不填则不开启 GitHub 登录"
+      },
+      "GITHUB_CLIENT_SECRET": {
+        "description": "GitHub OAuth App 的 Client Secret，可选。与 GITHUB_CLIENT_ID 配对使用"
+      }
+    }
   },
   "keywords": ["blog", "cloudflare", "workers", "d1"],
   "author": "",

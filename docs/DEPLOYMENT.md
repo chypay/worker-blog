@@ -5,6 +5,12 @@
 **版本**: v1.7.0  
 **更新日期**: 2026-11-11
 
+> **本仓库的差异说明**
+> - `wrangler.toml` 放在**仓库根目录**，资源 ID 为占位值，一键部署时由 Cloudflare 自动创建并回写
+> - 部署命令统一为 `npm run deploy`（构建前端 → 生产库迁移 → `wrangler deploy`）
+> - 本仓库**未内置** GitHub Actions 部署流水线（原 `deploy.yml` 已移到 `.github/workflows-disabled/`），
+>   因此下文里所有“由 GitHub Actions 触发部署钩子”的步骤在本仓库可以跳过，改用一键部署按钮或 Workers Builds 直连 Git
+
 ---
 
 ## 目录
@@ -87,7 +93,7 @@ GitHub Actions（.github/workflows/deploy.yml）
    ▼
 Workers Builds（由部署钩子触发）
    1. Build command：npm ci && npm run build → 生成 frontend/dist
-   2. Deploy command：npx wrangler deploy --config backend/wrangler.toml
+   2. Deploy command：npm run deploy（构建 + 迁移 + wrangler deploy）
    │
    ▼
 生产 Worker（blog）
@@ -162,17 +168,17 @@ Dashboard 右侧栏任意页面 → **API** 区域 → **Account ID**。
 
 ### 2.1 填写资源 ID
 
-编辑 `backend/wrangler.toml`：
+编辑仓库根目录的 `wrangler.toml`（一键部署时可跳过本步，Cloudflare 会自动创建资源并回写 ID）：
 
 ```toml
 name = "blog"
-main = "src/index.ts"
+main = "backend/src/index.ts"
 compatibility_date = "2024-01-01"
 # 导航请求（浏览器深链）优先交给静态资源，避免 SPA 深链落到 API 的 JSON 404
 compatibility_flags = ["assets_navigation_prefers_asset_serving"]
 
 [assets]
-directory = "../frontend/dist"
+directory = "frontend/dist"
 binding = "ASSETS"
 not_found_handling = "single-page-application"
 
@@ -202,7 +208,7 @@ STORAGE_PUBLIC_URL = "https://storage.your-domain.com"
 要点：
 
 - SPA 回退由 `not_found_handling` 负责，**不要**添加 `_redirects`（`/* /index.html 200` 在 Workers 下会被判定为死循环而忽略）。
-- `[assets]` 的 `directory` 相对**配置文件所在目录**解析，所以从仓库根用 `--config backend/wrangler.toml` 调用也能找到 `../frontend/dist`；不要改成相对仓库根的形式。
+- `[assets]` 的 `directory` 相对**配置文件所在目录**解析。配置在仓库根，所以写 `frontend/dist`；如果以后把配置挪回 `backend/`，要同步改成 `../frontend/dist`。
 - `name` 必须与 Dashboard 里的 Worker 名一致，否则 Workers Builds 构建会失败。
 - `FRONTEND_URL` 不要删：邮件在 Cron/后台任务里生成，没有请求上下文；CORS 的默认白名单也依赖它。
 
@@ -212,7 +218,7 @@ STORAGE_PUBLIC_URL = "https://storage.your-domain.com"
 
 ```bash
 npm ci
-npm run migrate -- blog-db --remote
+npm run db:migrate          # 等价于 bash scripts/migrate.sh --remote，用 binding 名 DB
 ```
 
 也可以在 **D1 → blog-db → Console** 里按顺序执行 `database/schema-*.sql`。
@@ -253,12 +259,12 @@ Workers Builds 负责**构建前端并把 Worker 与静态资源一起部署**�
 | Production branch | `main` |
 | Root directory | 仓库根（`/`，不要填 `backend`） |
 | Build command | `npm ci && npm run build` |
-| Deploy command | `npx wrangler deploy --config backend/wrangler.toml` |
+| Deploy command | `npm run deploy` |
 | Build variables | 不需要设置 `VITE_API_URL` |
 
-> Deploy command **必须带 `--config backend/wrangler.toml`**。构建根目录是仓库根，根目录没有 `wrangler.toml`，直接 `npx wrangler deploy` 会报 `Missing entry-point to Worker script or to assets directory`。
+> Deploy command 直接用根目录的 `npm run deploy`：它先构建前端，再跑生产 D1 迁移，最后 `wrangler deploy`。`wrangler.toml` 就在仓库根，不需要再传 `--config`。
 >
-> 仓库只有 `backend/wrangler.toml` 这一份配置，**不要**复制或软链到仓库根。
+> 不要单独执行 `npx wrangler deploy` 并跳过构建，否则 Worker 可能带上缺失或过期的 `frontend/dist`。
 >
 > Build command 在仓库根安装依赖（workspaces 的唯一锁文件在根目录）并构建出 `frontend/dist`，否则 Worker 会带上缺失或过期的静态资源。
 
@@ -405,7 +411,7 @@ npm run deploy
 等价于：
 
 ```bash
-npm run build --workspace=frontend && wrangler deploy --config backend/wrangler.toml
+npm run build --workspace=frontend && wrangler deploy
 ```
 
 先构建前端，再把 Worker 与 `frontend/dist` 一起上传。
@@ -451,7 +457,7 @@ curl https://your-domain.com/api/unknown
 ### 4. 查看日志
 
 ```bash
-wrangler tail --config backend/wrangler.toml
+wrangler tail
 ```
 
 或在 Dashboard → Workers → blog → Logs 查看。
@@ -462,7 +468,7 @@ wrangler tail --config backend/wrangler.toml
 
 > 示例文件：`backend/.env.example`、`frontend/.env.example`
 
-### 后端（`backend/wrangler.toml` 的 `[vars]` + Secrets）
+### 后端（`wrangler.toml` 的 `[vars]` + Secrets）
 
 | 变量名 | 类型 | 必需 | 说明 |
 |--------|------|------|------|
@@ -498,13 +504,13 @@ wrangler tail --config backend/wrangler.toml
 
 **原因**：导航请求进入了 Worker，`not_found_handling` 未生效。
 
-**解决**：确认 `backend/wrangler.toml` 有 `not_found_handling = "single-page-application"`，`compatibility_flags` 包含 `assets_navigation_prefers_asset_serving`，且 `frontend/dist/index.html` 存在。
+**解决**：确认 `wrangler.toml` 有 `not_found_handling = "single-page-application"`，`compatibility_flags` 包含 `assets_navigation_prefers_asset_serving`，且 `frontend/dist/index.html` 存在。
 
 ### 2. 部署后线上仍是旧前端
 
 **原因**：构建时没有生成最新的 `frontend/dist`。
 
-**解决**：确认 Build command 为 `npm ci && npm run build`、Root directory 是仓库根、Deploy command 带 `--config backend/wrangler.toml`；本地手动部署用根目录 `npm run deploy`。
+**解决**：确认 Build command 为 `npm ci && npm run build`、Root directory 是仓库根、Deploy command 为 `npm run deploy`（它自带构建与迁移）；本地手动部署同样在根目录跑 `npm run deploy`。
 
 ### 3. push 之后什么都没部署
 
@@ -521,7 +527,7 @@ Dashboard 的 Worker 名必须与 `wrangler.toml` 的 `name`（`blog`）一致�
 
 ### 5. 构建成功但报 `Missing entry-point to Worker script or to assets directory`
 
-Deploy command 在仓库根执行了 `npx wrangler deploy`，而根目录没有 `wrangler.toml`。改为 `npx wrangler deploy --config backend/wrangler.toml`。
+Deploy command 在仓库根执行了 `npx wrangler deploy`，但前端还没构建、或配置路径不对。本仓库的 `wrangler.toml` 在仓库根，直接用 `npm run deploy`（内含构建与迁移）。
 
 ### 6. 迁移失败：D1 权限不足
 
@@ -555,20 +561,20 @@ wrangler r2 bucket create blog-storage
 
 ```bash
 # 后端日志
-wrangler tail --config backend/wrangler.toml
+wrangler tail
 
 # 本地联调（前端 5173 + Worker 8787）
 npm run dev
 npm run dev:backend
 
 # 检查数据库内容
-wrangler d1 execute blog-db --config backend/wrangler.toml --command="SELECT * FROM posts LIMIT 5"
+wrangler d1 execute DB --command="SELECT * FROM posts LIMIT 5"
 
 # 查看部署历史
-wrangler deployments list --config backend/wrangler.toml
+wrangler deployments list
 
 # 只验证配置与产物，不上传
-wrangler deploy --config backend/wrangler.toml --dry-run
+wrangler deploy --dry-run
 ```
 
 ---
@@ -596,7 +602,7 @@ wrangler deploy --config backend/wrangler.toml --dry-run
 - [ ] 已连接 GitHub 仓库，Production branch 为 `main`
 - [ ] Root directory 为仓库根
 - [ ] Build command：`npm ci && npm run build`
-- [ ] Deploy command：`npx wrangler deploy --config backend/wrangler.toml`
+- [ ] Deploy command：`npm run deploy`
 - [ ] **Build watch paths 已设为 Include `__none__` / Exclude `*`**（关闭 push 自动部署）
 - [ ] **已实测**：钩子构建不受 watch paths 过滤（部署列表有 `ci-deploy - 部署钩子` 记录）
 - [ ] **回归项待验证**：只改 README 的 push 只新增 1 条 `ci-deploy` 构建，不出现 `Unknown` 构建

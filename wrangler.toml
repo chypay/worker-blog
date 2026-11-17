@@ -1,0 +1,88 @@
+# ============================================================
+# Cloudflare Worker 配置
+#
+# 本文件放在仓库根目录，Deploy to Cloudflare 按钮会读取它来自动创建
+# D1 / KV / R2 / Durable Object，并把真实 ID 回写到你克隆出来的仓库。
+# 手动部署时用 wrangler 的官方命令，无需额外参数：
+#   wrangler deploy          # 构建前端后部署
+#   wrangler d1 execute DB   # 用 binding 名操作数据库
+# ============================================================
+
+name = "blog"
+main = "backend/src/index.ts"
+compatibility_date = "2024-01-01"
+# 静态资源挂到同一 Worker 后，导航请求（浏览器深链）优先交给静态资源、
+# 不进入 Worker，避免 Hono 的 JSON 404 覆盖 SPA 的 index.html。
+# 保持 compatibility_date 不变，避免既有运行时行为发生变化。
+compatibility_flags = ["assets_navigation_prefers_asset_serving"]
+
+# 前端静态资源（Vite 产物），与 API 同域部署
+[assets]
+directory = "frontend/dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+
+# D1 数据库
+# database_id 是占位值：一键部署时 Cloudflare 会自动创建数据库并回写真实 ID。
+# 手动部署先执行 `wrangler d1 create blog-db`，再把返回的 ID 填到这里。
+[[d1_databases]]
+binding = "DB"
+database_name = "blog-db"
+database_id = "00000000-0000-0000-0000-000000000000"
+
+# KV 缓存（同样由一键部署自动创建，或 `wrangler kv namespace create blog-cache`）
+[[kv_namespaces]]
+binding = "CACHE"
+id = "00000000000000000000000000000000"
+
+# R2 存储：图床，文章配图统一存放在 post-image/ 目录
+[[r2_buckets]]
+binding = "STORAGE"
+bucket_name = "blog-storage"
+
+# Durable Object - 原子限流计数器
+[[durable_objects.bindings]]
+name = "RATE_LIMITER"
+class_name = "RateLimiter"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["RateLimiter"]
+
+# 日志配置
+[observability]
+enabled = true
+head_sampling_rate = 1
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+persist = true
+invocation_logs = true
+
+# 定时任务触发器（每 15 分钟扫描一次到期汇总，daily / weekly 在同一任务内处理）
+[triggers]
+crons = ["*/15 * * * *"]
+
+# 环境变量（公开的配置）
+[vars]
+ENVIRONMENT = "production"
+# 部署后改成你的实际站点地址；占位值不影响启动
+FRONTEND_URL = "https://blog.example.com"
+STORAGE_PUBLIC_URL = "https://storage.example.com"
+# Resend 发件地址：自有域名未在 Resend 验证前，保持 onboarding@resend.dev
+# （用该地址时只能发到 Resend 账户主人的邮箱）
+RESEND_FROM_EMAIL = "onboarding@resend.dev"
+
+# 自定义域名（可选）：取消注释并把域名改成你自己的，
+# 部署时 Cloudflare 会自动创建 DNS 记录并签证书
+# [[routes]]
+# pattern = "blog.example.com"
+# custom_domain = true
+
+# Secrets 不写在本文件里，用下面任一方式设置：
+#   wrangler secret put JWT_SECRET
+#   Cloudflare Dashboard > Workers & Pages > blog > Settings > Variables
+# 需要的 secrets：JWT_SECRET（必需）、POST_PASSWORD_SECRET（可选）、
+#   GITHUB_CLIENT_ID / GITHUB_CLIENT_SECRET（可选，GitHub 登录）、
+#   RESEND_API_KEY（可选，邮件通知）
